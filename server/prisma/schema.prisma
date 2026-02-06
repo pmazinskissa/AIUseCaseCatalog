@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUBMITTER
+  COMMITTEE
+  ADMIN
+}
+
+enum Status {
+  NEW
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum ApprovalStatus {
+  PENDING_REVIEW
+  APPROVED
+  ON_HOLD
+  REJECTED
+}
+
+enum VisibilityScope {
+  PRIVATE
+  GROUP
+  GENERAL
+}
+
+model User {
+  id                String            @id @default(uuid())
+  email             String            @unique
+  name              String?
+  role              Role              @default(SUBMITTER)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  submittedUseCases UseCase[]         @relation("SubmittedBy")
+  ownedUseCases     UseCase[]         @relation("OwnedBy")
+  memberships       GroupMembership[]
+
+  @@index([email])
+}
+
+model Group {
+  id          String            @id @default(uuid())
+  name        String
+  slug        String            @unique
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  memberships GroupMembership[]
+  useCases    UseCaseGroup[]
+
+  @@index([name])
+}
+
+model GroupMembership {
+  id        String   @id @default(uuid())
+  userId    String
+  groupId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, groupId])
+  @@index([groupId])
+  @@index([userId])
+}
+
+model UseCase {
+  id                 String          @id @default(uuid())
+  name               String          @db.VarChar(200)
+  description        String          @db.Text
+  problemStatement   String?         @db.Text
+  clientProject      String?         @db.VarChar(200)
+  submitterId        String
+  submitter          User            @relation("SubmittedBy", fields: [submitterId], references: [id], onDelete: Cascade)
+  dateSubmitted      DateTime        @default(now())
+  businessImpact     Int?
+  feasibility        Int?
+  strategicAlignment Int?
+  compositeScore     Float?
+  status             Status          @default(NEW)
+  approvalStatus     ApprovalStatus  @default(PENDING_REVIEW)
+  ownerId            String?
+  owner              User?           @relation("OwnedBy", fields: [ownerId], references: [id], onDelete: SetNull)
+  notes              String?         @db.Text
+  visibilityScope    VisibilityScope @default(GENERAL)
+  groups             UseCaseGroup[]
+  tools              UseCaseTool[]
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+
+  @@index([submitterId])
+  @@index([ownerId])
+  @@index([status])
+  @@index([approvalStatus])
+  @@index([visibilityScope])
+}
+
+model UseCaseGroup {
+  id        String   @id @default(uuid())
+  useCaseId String
+  groupId   String
+  createdAt DateTime @default(now())
+
+  useCase UseCase @relation(fields: [useCaseId], references: [id], onDelete: Cascade)
+  group   Group   @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([useCaseId, groupId])
+  @@index([groupId])
+  @@index([useCaseId])
+}
+
+model Tool {
+  id          String         @id @default(uuid())
+  name        String         @db.VarChar(200)
+  description String?        @db.Text
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  useCases    UseCaseTool[]
+
+  @@index([name])
+}
+
+model UseCaseTool {
+  id        String   @id @default(uuid())
+  useCaseId String
+  toolId    String
+  createdAt DateTime @default(now())
+
+  useCase UseCase @relation(fields: [useCaseId], references: [id], onDelete: Cascade)
+  tool    Tool    @relation(fields: [toolId], references: [id], onDelete: Cascade)
+
+  @@unique([useCaseId, toolId])
+  @@index([toolId])
+  @@index([useCaseId])
+}
