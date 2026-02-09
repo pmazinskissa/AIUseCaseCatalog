@@ -19,17 +19,21 @@ export function Submit() {
   });
 
   useEffect(() => {
+    let cancelled = false;
+
     const fetchTools = async () => {
       try {
         const response = await toolsApi.list({ limit: 100 });
+        if (cancelled) return;
         if (response.data) {
           setAvailableTools(response.data);
         }
       } catch (err) {
-        console.error('Failed to fetch tools:', err);
+        if (!cancelled) console.error('Failed to fetch tools:', err);
       }
     };
     fetchTools();
+    return () => { cancelled = true; };
   }, []);
 
   const handleChange = (

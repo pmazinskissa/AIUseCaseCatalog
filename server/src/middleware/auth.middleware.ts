@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { prisma } from '../lib/prisma';
 import { AuthContext } from '../types/auth';
-import { Role } from '@prisma/client';
+import { Role, Prisma } from '@prisma/client';
 
 const HEADER_CANDIDATES = {
   email: [
@@ -182,7 +182,7 @@ export const requireCommitteeOrAdmin = (req: Request, res: Response, next: NextF
 export const buildVisibilityWhere = (auth: AuthContext) => {
   if (auth.isAdmin) return {};
 
-  const clauses: any[] = [
+  const clauses: Prisma.UseCaseWhereInput[] = [
     { submitterId: auth.userId },
     { visibilityScope: 'GENERAL' }
   ];

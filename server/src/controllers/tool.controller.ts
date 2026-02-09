@@ -21,7 +21,7 @@ export class ToolController {
 
   async findAll(req: Request, res: Response) {
     try {
-      const query: ToolQueryInput = req.query as any;
+      const query = req.query as unknown as ToolQueryInput;
       const { tools, total, page, limit } = await toolService.findAll(query);
       return paginatedResponse(res, tools, total, page, limit);
     } catch (error) {

@@ -1,0 +1,42 @@
+# Render Blueprint - AI Use Case Catalog
+# https://render.com/docs/blueprint-spec
+#
+# To deploy:
+# 1. Push this file to your repository
+# 2. Go to Render Dashboard > Blueprints > New Blueprint Instance
+# 3. Connect your repository
+# 4. Set the required environment variables marked as sync: false
+
+services:
+  - type: web
+    name: ai-use-case-catalog
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    healthCheckPath: /api/health
+    preDeployCommand: cd /app/server && npx prisma migrate deploy
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ai-use-case-catalog-db
+          property: connectionString
+      - key: CORS_ORIGIN
+        sync: false  # Set to your Render URL (e.g., https://ai-use-case-catalog.onrender.com)
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_EMAILS
+        sync: false
+      - key: AUTH_EMAIL_DOMAIN
+        sync: false
+      - key: COMMITTEE_EMAILS
+        sync: false
+
+databases:
+  - name: ai-use-case-catalog-db
+    plan: starter
+    databaseName: ai_use_case_catalog
+    postgresMajorVersion: 15

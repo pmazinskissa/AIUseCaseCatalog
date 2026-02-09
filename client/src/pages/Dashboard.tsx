@@ -21,22 +21,27 @@ export function Dashboard() {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
+    let cancelled = false;
+
     const fetchUseCases = async () => {
       setIsLoading(true);
       setError('');
       try {
         const response = await useCasesApi.list(filters);
+        if (cancelled) return;
         setUseCases(response.data);
         setTotalPages(response.pagination.totalPages);
         setTotal(response.pagination.total);
       } catch (err) {
+        if (cancelled) return;
         setError(err instanceof Error ? err.message : 'Failed to fetch use cases');
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setIsLoading(false);
       }
     };
 
     fetchUseCases();
+    return () => { cancelled = true; };
   }, [filters]);
 
   const handlePageChange = (page: number) => {

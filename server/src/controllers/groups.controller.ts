@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma';
 
 export async function listGroups(req: Request, res: Response) {
@@ -46,8 +47,8 @@ export async function createGroup(req: Request, res: Response) {
     });
 
     return res.status(201).json({ success: true, data: group });
-  } catch (error: any) {
-    if (error.code === 'P2002') {
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
       return res.status(400).json({ success: false, error: 'Group slug already exists' });
     }
     console.error('Failed to create group:', error);
@@ -65,8 +66,8 @@ export async function deleteGroup(req: Request, res: Response) {
   try {
     await prisma.group.delete({ where: { id } });
     return res.json({ success: true, data: { message: 'Group deleted successfully' } });
-  } catch (error: any) {
-    if (error.code === 'P2025') {
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
       return res.status(404).json({ success: false, error: 'Group not found' });
     }
     console.error('Failed to delete group:', error);
@@ -96,8 +97,8 @@ export async function addUserToGroup(req: Request, res: Response) {
     });
 
     return res.status(201).json({ success: true, data: membership });
-  } catch (error: any) {
-    if (error.code === 'P2002') {
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
       return res.status(400).json({ success: false, error: 'User is already a member of this group' });
     }
     console.error('Failed to add user to group:', error);
@@ -120,8 +121,8 @@ export async function removeUserFromGroup(req: Request, res: Response) {
     });
 
     return res.json({ success: true, data: { message: 'User removed from group' } });
-  } catch (error: any) {
-    if (error.code === 'P2025') {
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
       return res.status(404).json({ success: false, error: 'Membership not found' });
     }
     console.error('Failed to remove user from group:', error);

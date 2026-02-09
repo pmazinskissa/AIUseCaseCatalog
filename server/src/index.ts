@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import fs from 'fs';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware';
 import { authMiddleware, requireAdmin } from './middleware/auth.middleware';
 import { getMe } from './controllers/me.controller';
@@ -13,7 +15,10 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  credentials: true
+}));
 app.use(express.json());
 
 // Health check (public)
@@ -58,6 +63,21 @@ app.use('/api/users', userRoutes);
 
 // Tool routes
 app.use('/api/tools', toolRoutes);
+
+// Serve frontend static files in production
+const candidatePaths = [
+  path.resolve(__dirname, '../../client/dist'),
+  path.resolve(__dirname, '../client/dist'),
+  path.resolve(process.cwd(), 'client/dist')
+];
+const frontendDist = candidatePaths.find(p => fs.existsSync(path.join(p, 'index.html')));
+if (frontendDist) {
+  app.use(express.static(frontendDist));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api/')) return next();
+    res.sendFile(path.join(frontendDist, 'index.html'), err => { if (err) next(err); });
+  });
+}
 
 // Error handling
 app.use(notFoundHandler);

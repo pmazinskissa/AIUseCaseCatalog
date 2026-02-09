@@ -17,10 +17,6 @@ export function AdminPanel() {
     role: 'SUBMITTER' as Role,
   });
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
@@ -32,6 +28,10 @@ export function AdminPanel() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   const handleEditUser = async (e: React.FormEvent) => {
     e.preventDefault();

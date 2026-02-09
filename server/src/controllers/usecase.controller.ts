@@ -31,7 +31,7 @@ export class UseCaseController {
         return errorResponse(res, 'Not authenticated', 401);
       }
 
-      const query: UseCaseQueryInput = req.query as any;
+      const query = req.query as unknown as UseCaseQueryInput;
       const { useCases, total, page, limit } = await useCaseService.findAll(query, req.auth);
       return paginatedResponse(res, useCases, total, page, limit);
     } catch (error) {

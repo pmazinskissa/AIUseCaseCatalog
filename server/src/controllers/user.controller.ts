@@ -6,7 +6,7 @@ import { UpdateUserInput, UserQueryInput } from '../validators/user.validator';
 export class UserController {
   async findAll(req: Request, res: Response) {
     try {
-      const query: UserQueryInput = req.query as any;
+      const query = req.query as unknown as UserQueryInput;
       const { users, total, page, limit } = await userService.findAll(query);
       return paginatedResponse(res, users, total, page, limit);
     } catch (error) {

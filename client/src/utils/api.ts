@@ -16,13 +16,24 @@ async function fetchApi<T>(
     headers,
   });
 
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.error || 'Request failed');
+  let data: unknown;
+  const contentType = response.headers.get('content-type');
+  if (contentType && contentType.includes('application/json')) {
+    data = await response.json();
+  } else {
+    const text = await response.text();
+    if (!response.ok) {
+      throw new Error(text || `Request failed with status ${response.status}`);
+    }
+    data = text;
   }
 
-  return data;
+  if (!response.ok) {
+    const errorData = data as { error?: string };
+    throw new Error(errorData.error || `Request failed with status ${response.status}`);
+  }
+
+  return data as T;
 }
 
 export const authApi = {
@@ -140,7 +151,7 @@ export const groupsApi = {
     }),
 
   addMember: (groupId: string, userId: string) =>
-    fetchApi<ApiResponse<any>>('/groups/members', {
+    fetchApi<ApiResponse<{ id: string }>>('/groups/members', {
       method: 'POST',
       body: JSON.stringify({ groupId, userId }),
     }),

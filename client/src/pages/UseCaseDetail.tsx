@@ -53,11 +53,14 @@ export function UseCaseDetail() {
   });
 
   useEffect(() => {
+    let cancelled = false;
+
     const fetchData = async () => {
       if (!id) return;
       setIsLoading(true);
       try {
         const response = await useCasesApi.get(id);
+        if (cancelled) return;
         if (response.data) {
           setUseCase(response.data);
           setEditData({
@@ -80,6 +83,7 @@ export function UseCaseDetail() {
             usersApi.getOwnerCandidates(),
             toolsApi.list({ limit: 100 }),
           ]);
+          if (cancelled) return;
           if (ownersResponse.data) {
             setOwnerCandidates(ownersResponse.data);
           }
@@ -88,13 +92,15 @@ export function UseCaseDetail() {
           }
         }
       } catch (err) {
+        if (cancelled) return;
         setError(err instanceof Error ? err.message : 'Failed to fetch use case');
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setIsLoading(false);
       }
     };
 
     fetchData();
+    return () => { cancelled = true; };
   }, [id, isCommitteeOrAdmin]);
 
   const canEdit = useCase && (user?.id === useCase.submitterId || isCommitteeOrAdmin);

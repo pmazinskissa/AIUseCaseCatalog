@@ -17,10 +17,6 @@ export function AdminTools() {
     description: '',
   });
 
-  useEffect(() => {
-    fetchTools();
-  }, []);
-
   const fetchTools = async () => {
     setIsLoading(true);
     try {
@@ -34,6 +30,10 @@ export function AdminTools() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchTools();
+  }, []);
 
   const handleOpenForm = (tool?: Tool) => {
     if (tool) {

@@ -17,6 +17,5 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src"],
-  "exclude": ["src/pages/Login.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
