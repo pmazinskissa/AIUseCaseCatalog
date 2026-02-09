@@ -12,7 +12,7 @@ services:
     name: ai-use-case-catalog
     runtime: docker
     dockerfilePath: ./Dockerfile
-    plan: starter
+    plan: free
     healthCheckPath: /api/health
     preDeployCommand: cd /app/server && npx prisma migrate deploy
     envVars:
@@ -37,6 +37,6 @@ services:
 
 databases:
   - name: ai-use-case-catalog-db
-    plan: basic-256mb
+    plan: free
     databaseName: ai_use_case_catalog
     postgresMajorVersion: 15
