@@ -85,12 +85,13 @@ const resolveAuthContext = async (req: Request): Promise<AuthContext> => {
     email = process.env.DEV_IMPERSONATE_EMAIL.toLowerCase();
   }
 
-  // Fallback for local development
+  // Fallback when no auth proxy is present
   if (!email) {
-    if (process.env.NODE_ENV === 'production') {
+    const defaultEmail = process.env.DEFAULT_AUTH_EMAIL;
+    if (!defaultEmail && process.env.NODE_ENV === 'production') {
       throw new Error('Missing authenticated email');
     }
-    email = fallbackEmail;
+    email = defaultEmail || fallbackEmail;
     isDevFallback = true;
   }
 
