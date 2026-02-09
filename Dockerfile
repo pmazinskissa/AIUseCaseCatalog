@@ -38,4 +38,4 @@ COPY --from=client-build /app/client/dist ./client/dist
 
 EXPOSE 10000
 
-CMD ["node", "server/dist/index.js"]
+CMD ["sh", "-c", "cd /app/server && npx prisma migrate deploy && cd /app && node server/dist/index.js"]
