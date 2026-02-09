@@ -37,6 +37,6 @@ services:
 
 databases:
   - name: ai-use-case-catalog-db
-    plan: starter
+    plan: basic-256mb
     databaseName: ai_use_case_catalog
     postgresMajorVersion: 15
