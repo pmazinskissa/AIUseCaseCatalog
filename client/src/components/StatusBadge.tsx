@@ -1,4 +1,4 @@
-import { Clock, Loader2, CheckCircle2, AlertCircle, PauseCircle, XCircle } from 'lucide-react';
+import { Clock, Loader2, CheckCircle2, PauseCircle, XCircle } from 'lucide-react';
 import { Status, ApprovalStatus, STATUS_LABELS, APPROVAL_STATUS_LABELS } from '../types';
 
 interface StatusBadgeProps {

@@ -43,15 +43,6 @@ export function Layout({ children }: LayoutProps) {
     return 'AI Use Case Catalog';
   };
 
-  const getPageDescription = () => {
-    if (location.pathname === '/') return 'Browse and manage AI use cases';
-    if (location.pathname === '/submit') return 'Share your AI implementation';
-    if (location.pathname === '/admin/tools') return 'Configure available AI tools';
-    if (location.pathname === '/admin') return 'Manage user roles and permissions';
-    if (location.pathname.startsWith('/use-case/')) return 'View use case information';
-    return '';
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-50 to-blue-50/50 text-slate-900 flex flex-col md:flex-row">
       {/* Sidebar Navigation */}

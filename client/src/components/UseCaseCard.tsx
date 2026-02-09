@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Star, User, Calendar, Wrench, ArrowRight, Sparkles } from 'lucide-react';
+import { Star, User, Calendar, ArrowRight } from 'lucide-react';
 import { UseCase } from '../types';
 import { StatusBadge, ApprovalBadge } from './StatusBadge';
 

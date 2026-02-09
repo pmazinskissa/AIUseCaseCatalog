@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, AlertCircle, Send, X, Wrench, Check, FileText, Sparkles } from 'lucide-react';
+import { Loader2, AlertCircle, Send, X, Wrench, Check, FileText } from 'lucide-react';
 import { Tool } from '../types';
 import { useCasesApi, toolsApi } from '../utils/api';
 import { Layout } from '../components/Layout';
