@@ -41,6 +41,47 @@ async function main() {
   });
   console.log('Created submitter user:', submitter.email);
 
+  // Seed AI tools
+  const tools = [
+    'Swiss Army Knife Meeting Insight Generator',
+    'Slide Architect',
+    'Prompt-to-GPT Builder',
+    'Prompt Librarian',
+    'Deliverable Evaluation Claude Skill',
+    'AI Data Prep',
+    'Simple Data Masking Utility',
+    'Fuzzy Matching',
+    'Digital Data Analyst',
+    'Digital Organizational Analyst',
+    'Digital Financial Analyst',
+    'Digital Issue Analyst',
+    'Digital Cost Benchmarking Analyst',
+    'Complex Program Management Agent',
+    'SmartSheet Builder',
+    'Project Initiation Starter',
+    'Network Diagram Analyzer',
+    'Forecasting Tool',
+    'Load Balancing Tool',
+    'Control Tower - Algorithm Library',
+    'Control Tower Documentation Builder',
+    'Candidate Interview Guide Builder',
+    'Candidate Interview Transcript Evaluator',
+    'SSA Market Intelligence (SSAMI)',
+    'Case Study Generator',
+  ];
+
+  for (const name of tools) {
+    await prisma.tool.upsert({
+      where: { id: name.toLowerCase().replace(/[^a-z0-9]+/g, '-') },
+      update: {},
+      create: {
+        id: name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        name,
+      },
+    });
+  }
+  console.log(`Seeded ${tools.length} AI tools`);
+
   // Create a sample group
   const group = await prisma.group.upsert({
     where: { slug: 'general' },

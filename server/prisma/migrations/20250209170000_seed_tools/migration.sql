@@ -1,0 +1,28 @@
+-- Seed AI Tools
+INSERT INTO "Tool" ("id", "name", "createdAt", "updatedAt") VALUES
+  ('swiss-army-knife-meeting-insight-generator', 'Swiss Army Knife Meeting Insight Generator', NOW(), NOW()),
+  ('slide-architect', 'Slide Architect', NOW(), NOW()),
+  ('prompt-to-gpt-builder', 'Prompt-to-GPT Builder', NOW(), NOW()),
+  ('prompt-librarian', 'Prompt Librarian', NOW(), NOW()),
+  ('deliverable-evaluation-claude-skill', 'Deliverable Evaluation Claude Skill', NOW(), NOW()),
+  ('ai-data-prep', 'AI Data Prep', NOW(), NOW()),
+  ('simple-data-masking-utility', 'Simple Data Masking Utility', NOW(), NOW()),
+  ('fuzzy-matching', 'Fuzzy Matching', NOW(), NOW()),
+  ('digital-data-analyst', 'Digital Data Analyst', NOW(), NOW()),
+  ('digital-organizational-analyst', 'Digital Organizational Analyst', NOW(), NOW()),
+  ('digital-financial-analyst', 'Digital Financial Analyst', NOW(), NOW()),
+  ('digital-issue-analyst', 'Digital Issue Analyst', NOW(), NOW()),
+  ('digital-cost-benchmarking-analyst', 'Digital Cost Benchmarking Analyst', NOW(), NOW()),
+  ('complex-program-management-agent', 'Complex Program Management Agent', NOW(), NOW()),
+  ('smartsheet-builder', 'SmartSheet Builder', NOW(), NOW()),
+  ('project-initiation-starter', 'Project Initiation Starter', NOW(), NOW()),
+  ('network-diagram-analyzer', 'Network Diagram Analyzer', NOW(), NOW()),
+  ('forecasting-tool', 'Forecasting Tool', NOW(), NOW()),
+  ('load-balancing-tool', 'Load Balancing Tool', NOW(), NOW()),
+  ('control-tower-algorithm-library', 'Control Tower - Algorithm Library', NOW(), NOW()),
+  ('control-tower-documentation-builder', 'Control Tower Documentation Builder', NOW(), NOW()),
+  ('candidate-interview-guide-builder', 'Candidate Interview Guide Builder', NOW(), NOW()),
+  ('candidate-interview-transcript-evaluator', 'Candidate Interview Transcript Evaluator', NOW(), NOW()),
+  ('ssa-market-intelligence-ssami', 'SSA Market Intelligence (SSAMI)', NOW(), NOW()),
+  ('case-study-generator', 'Case Study Generator', NOW(), NOW())
+ON CONFLICT ("id") DO NOTHING;
